@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Taskboard</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">Personal workspace</p>
+          <h1>Taskboard</h1>
+          <p class="subtitle">Plan the work. Keep the day moving.</p>
+        </div>
+        <div class="date-card" aria-label="Current date">
+          <span>Today</span>
+          <strong id="today-label"></strong>
+        </div>
+      </header>
+
+      <section class="panel composer" aria-labelledby="add-task-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">New item</p>
+            <h2 id="add-task-heading">Add a task</h2>
+          </div>
+          <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+        </div>
+
+        <form id="task-form">
+          <label class="title-field">
+            <span>Task title</span>
+            <input id="task-title" name="title" type="text" maxlength="100" placeholder="What needs to get done?" required>
+          </label>
+
+          <label>
+            <span>Priority</span>
+            <select id="task-priority" name="priority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Due date</span>
+            <input id="task-due-date" name="dueDate" type="date" required>
+          </label>
+
+          <button id="add-task-button" class="primary-button" type="submit">Add task</button>
+        </form>
+      </section>
+
+      <section class="panel task-panel" aria-labelledby="tasks-heading">
+        <div class="task-toolbar">
+          <div>
+            <p class="eyebrow">Your list</p>
+            <h2 id="tasks-heading">Tasks</h2>
+          </div>
+
+          <div class="task-actions">
+            <button id="archive-completed" class="archive-button" type="button">Archive completed</button>
+            <div class="filters" aria-label="Filter tasks">
+              <button id="filter-all" class="filter-button active" type="button" data-filter="all">All</button>
+              <button id="filter-active" class="filter-button" type="button" data-filter="active">Active</button>
+              <button id="filter-completed" class="filter-button" type="button" data-filter="completed">Completed</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="list-summary">
+          <span><strong id="visible-count">0</strong> visible tasks</span>
+          <span id="task-status" role="status" aria-live="polite"></span>
+          <span id="current-filter-label">Showing all tasks</span>
+        </div>
+
+        <div id="task-list" class="task-list" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <template id="task-template">
+      <article class="task-row" data-testid="task-row">
+        <div class="completion-indicator" aria-hidden="true"></div>
+        <div class="task-copy">
+          <h3 class="task-title"></h3>
+          <div class="task-meta">
+            <span class="priority-badge"></span>
+            <span class="due-date"></span>
+          </div>
+        </div>
+        <button class="complete-button" data-testid="complete-task" type="button">Mark complete</button>
+      </article>
+    </template>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
