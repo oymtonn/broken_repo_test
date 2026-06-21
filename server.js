@@ -118,7 +118,7 @@ async function processArchiveJob(job) {
 app.get("/tasks", (req, res) => {
   const status = req.query.status ?? "all";
 
-  if (!["all", "active", "completed"].includes(status)) {
+  if (![ "all", "active", "completed"].includes(status)) {
     return res.status(400).json({ error: "Unknown task status." });
   }
 
@@ -209,7 +209,7 @@ app.patch("/tasks/:id/complete", (req, res) => {
   }
 
   task.completed = true;
-  invalidateTaskLists(["all", statusFor(task)]);
+  invalidateTaskLists(["all", "active", "completed"]);
   return res.json({ success: true, task });
 });
 
