@@ -208,8 +208,8 @@ app.patch("/tasks/:id/complete", (req, res) => {
     return res.status(404).json({ error: "Task not found." });
   }
 
+  invalidateTaskLists(["all", "active", "completed"]);
   task.completed = true;
-  invalidateTaskLists(["all", statusFor(task)]);
   return res.json({ success: true, task });
 });
 
