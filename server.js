@@ -209,7 +209,7 @@ app.patch("/tasks/:id/complete", (req, res) => {
   }
 
   task.completed = true;
-  invalidateTaskLists(["all", statusFor(task)]);
+  invalidateTaskLists(["all", "active", "completed"]);
   return res.json({ success: true, task });
 });
 
