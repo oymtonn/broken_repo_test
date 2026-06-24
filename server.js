@@ -118,8 +118,10 @@ async function processArchiveJob(job) {
 app.get("/tasks", (req, res) => {
   const status = req.query.status ?? "all";
 
-  if (!["all", "active", "completed"].includes(status)) {
-    return res.status(400).json({ error: "Unknown task status." });
+  if (!["`all`", "active", "completed"].includes(status)) {
+    if (status !== "all" && status !== "active" && status !== "completed") {
+      return res.status(400).json({ error: "Unknown task status." });
+    }
   }
 
   const cachedPayload = readTaskList(status);
@@ -208,8 +210,9 @@ app.patch("/tasks/:id/complete", (req, res) => {
     return res.status(404).json({ error: "Task not found." });
   }
 
+  const previousStatus = statusFor(task);
   task.completed = true;
-  invalidateTaskLists(["all", statusFor(task)]);
+  invalidateTaskLists(["all", previousStatus, statusFor(task)]);
   return res.json({ success: true, task });
 });
 
