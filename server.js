@@ -44,12 +44,12 @@ function invalidateTaskLists(statuses) {
   }
 }
 
-function createArchiveBatch(archivedTasks, job) {
+function createArchiveBatch(archivedTasks, jobId) {
   const batch = {
     id: `archive-${Date.now()}`,
     createdAt: new Date().toISOString(),
     entries: [],
-    context: { job }
+    context: { jobId }
   };
 
   for (const task of archivedTasks) {
@@ -89,7 +89,7 @@ async function processArchiveJob(job) {
   job.status = "processing";
   const snapshot = tasks.slice();
   const archivedTasks = tasks.filter((task) => job.taskIds.includes(task.id));
-  const batch = createArchiveBatch(archivedTasks, job);
+  const batch = createArchiveBatch(archivedTasks, job.id);
   job.batch = batch;
 
   for (const task of archivedTasks) {
@@ -101,7 +101,7 @@ async function processArchiveJob(job) {
     }
   }
 
-  invalidateTaskLists(["completed"]);
+  invalidateTaskLists(["all", "active", "completed"]);
 
   try {
     job.receipt = await persistArchiveBatch(batch);
@@ -109,6 +109,7 @@ async function processArchiveJob(job) {
     job.status = "completed";
   } catch (error) {
     tasks.push(...snapshot);
+    invalidateTaskLists(["all", "active", "completed"]);
     job.status = "failed";
     job.error = error;
     console.error(`Archive job ${job.id} failed`, error);
