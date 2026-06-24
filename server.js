@@ -49,7 +49,13 @@ function createArchiveBatch(archivedTasks, job) {
     id: `archive-${Date.now()}`,
     createdAt: new Date().toISOString(),
     entries: [],
-    context: { job }
+    context: {
+      job: {
+        id: job.id,
+        status: job.status,
+        createdAt: job.createdAt
+      }
+    }
   };
 
   for (const task of archivedTasks) {
